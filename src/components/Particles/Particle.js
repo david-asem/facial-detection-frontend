@@ -36,7 +36,7 @@ function Particle() {
             },
             onHover: {
               enable: true,
-              mode: "repulse",
+              mode: "",
             },
             resize: true,
           },
@@ -44,10 +44,7 @@ function Particle() {
             push: {
               quantity: 4,
             },
-            repulse: {
-              distance: 200,
-              duration: 0.4,
-            },
+           
           },
         },
         particles: {
