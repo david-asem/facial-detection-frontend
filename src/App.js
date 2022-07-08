@@ -8,18 +8,22 @@ import Logo from './components/Logo/Logo';
 import ImageUrlForm from './components/ImageUrlForm/ImageUrlForm';
 import Position from './components/Position/Position';
 import './App.css';
+import Modal from './components/Modal/Modal';
+import Profile from './components/Profile/Profile';
  
 
 
 const initialState = {
   input: '',
   imageUrl: '',
-  box: {},
+  box: [],
   route: 'signin',
   isSignedIn: false,
+  isProfileOpen: true,
   user: {
     id: '',
-    name: '',
+    firstname: '',
+    lastname: '',
     email: '',
     entries: 0,
     joined: ''
@@ -35,7 +39,8 @@ class App extends Component {
   loadUser = (data) => {
     this.setState({user: {
       id: data.id,
-      name: data.name,
+      firstname: data.first_name,
+      lastname: data.last_name,
       email: data.email,
       entries: data.entries,
       joined: data.joined
@@ -96,24 +101,43 @@ class App extends Component {
 
   onRouteChange = (route) => {
     if (route === 'signout') {
-      this.setState(initialState)
+      return this.setState(initialState)
     } else if (route === 'home') {
       this.setState({isSignedIn: true})
     }
     this.setState({route: route});
   }
 
+
+  toggleModal = () => {
+    this.setState(prevState => ({
+      ...prevState,
+      isProfileOpen: !prevState.isProfileOpen
+    }))
+
+  }
+
+
   render() {
-    const { isSignedIn, imageUrl, route, box } = this.state;
+    const { isSignedIn, imageUrl, route, box, isProfileOpen, user } = this.state;
     return (
       <div className="App">
          <Particle 
           
         />
-        <Navigation isSignedIn={isSignedIn} onRouteChange={this.onRouteChange} />
+        <Navigation isSignedIn={isSignedIn} onRouteChange={this.onRouteChange}
+        toggleModal={this.toggleModal}/>
+        {isProfileOpen &&
+          <Modal>
+            <Profile isProfileOpen={isProfileOpen} toggleModal={this.toggleModal}
+            user={user}/>
+        </Modal>
+        }
+        
+        
         { route === 'home'
           ? <div>
-              <Logo />
+            <Logo />
               <Position
                 name={this.state.user.name}
                 entries={this.state.user.entries}
